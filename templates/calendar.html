@@ -179,56 +179,15 @@
         {% endfor %}
     ];
 
-    // Generate recurring events using Croner
+    // Generate recurring events
     const recurringEvents = [];
-    const recurringEventTitles = {}; // Track titles for list consolidation
+    const recurringEventTitles = {};
     staticEvents.forEach(event => {
         if (event.schedule) {
             try {
-                // Croner expects: second minute hour day month dayOfWeek
-                // Our format: minute hour day month dayOfWeek (5 fields)
-                const parts = event.schedule.split(' ');
-                if (parts.length === 5) {
-                    const [minute, hour, , , dayOfWeek] = parts;
-                    const oneWeekAgo = new Date();
-                    oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
-                    const sixMonthsLater = new Date();
-                    sixMonthsLater.setMonth(sixMonthsLater.getMonth() + 6);
-                    
-                    // Generate all Tuesdays at the specified time
-                    const current = new Date(oneWeekAgo);
-                    current.setHours(parseInt(hour), parseInt(minute), 0, 0);
-                    
-                    // Find next occurrence
-                    while (current.getDay() !== parseInt(dayOfWeek)) {
-                        current.setDate(current.getDate() + 1);
-                    }
-                    
-                    while (current <= sixMonthsLater) {
-                        const year = current.getFullYear();
-                        const month = String(current.getMonth() + 1).padStart(2, '0');
-                        const day = String(current.getDate()).padStart(2, '0');
-                        const hour = String(current.getHours()).padStart(2, '0');
-                        const minute = String(current.getMinutes()).padStart(2, '0');
-                        const dateStr = `${year}-${month}-${day}T${hour}:${minute}`;
-                        const dateOnly = `${year}-${month}-${day}`;
-                        const isCancelled = event.cancelled && event.cancelled.includes(dateOnly);
-                        if (!isCancelled) {
-                            recurringEvents.push({
-                                ...event,
-                                start: dateStr,
-                                end: null,
-                                title: event.title,
-                                allDay: false,
-                                isRecurring: true
-                            });
-                        }
-                        current.setDate(current.getDate() + 7);
-                    }
-                    
-                    // Store for list consolidation
-                    recurringEventTitles[event.title] = true;
-                }
+                const events = generateRecurringEvents(event);
+                recurringEvents.push(...events);
+                recurringEventTitles[event.title] = true;
             } catch (e) {
                 console.error('Error generating recurring events:', e);
             }
@@ -306,20 +265,9 @@
             const startDate = new Date(event.start);
             const endDate = event.end ? new Date(event.end) : null;
             
-            const polishDaysShort = ['nie', 'pon', 'wt', 'śr', 'czw', 'pt', 'sob'];
-            
             let dateStr;
             if (endDate && endDate.getTime() !== startDate.getTime()) {
-                const startDay = polishDaysShort[startDate.getDay()];
-                const endDay = polishDaysShort[endDate.getDay()];
-                const year = startDate.getFullYear();
-                if (startDate.getMonth() === endDate.getMonth()) {
-                    dateStr = `${startDay} - ${endDay}, ${startDate.getDate()}-${endDate.getDate()} ${startDate.toLocaleDateString('pl-PL', { month: 'long' })} ${year}`;
-                } else {
-                    const startDateStr = startDate.toLocaleDateString('pl-PL', { day: 'numeric', month: 'long' });
-                    const endDateStr = endDate.toLocaleDateString('pl-PL', { day: 'numeric', month: 'long' });
-                    dateStr = `${startDay} - ${endDay}, ${startDateStr}-${endDateStr} ${year}`;
-                }
+                dateStr = formatDateRange(event.start, event.end);
             } else {
                 dateStr = startDate.toLocaleDateString('pl-PL', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
             }
