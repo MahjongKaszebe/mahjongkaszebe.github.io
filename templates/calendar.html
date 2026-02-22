@@ -29,6 +29,9 @@
         --fc-event-border-color: #000000;
         --fc-event-text-color: #FFE600;
     }
+    .fc-event:hover .fc-event-main {
+        background-color: #8B0000 !important;
+    }
     .fc-timegrid-view .fc-event,
     .fc-timegrid-view .fc-event .fc-event-main,
     .fc-timegrid-view .fc-event-title,
@@ -54,14 +57,25 @@
     .fc .fc-daygrid-day.fc-day-today {
         background-color: rgba(255, 0, 0, 0.2);
     }
-    .fc-list-event:hover td {
-        background-color: #FFE600 !important;
+    .fc-list-event {
+        background-color: #000 !important;
+        border-color: #FFE600 !important;
+    }
+    .fc-list-event td {
+        background-color: #000 !important;
+        border-color: #FFE600 !important;
+    }
+    .fc-list-event-title a {
+        color: #FFE600 !important;
+    }
+    .fc-list-event-time {
+        color: #FFE600 !important;
     }
     .fc-list-day-cushion {
         background-color: #FFE600 !important;
     }
-    .fc-list-event-title a {
-        color: #000 !important;
+    .fc-list-event:hover td {
+        background-color: #8B0000 !important;
     }
     .fc-daygrid-event-dot,
     .fc-list-event-dot {
@@ -151,11 +165,13 @@
                 }
             },
             locale: 'pl',
+            allDayText: 'Cały dzień',
             buttonText: {
                 today: 'Dzisiaj',
                 month: 'Miesiąc',
                 week: 'Tydzień',
-                day: 'Dzień'
+                day: 'Dzień',
+                list: 'Tydzień'
             },
             headerToolbar: {
                 left: 'prev,next today',
