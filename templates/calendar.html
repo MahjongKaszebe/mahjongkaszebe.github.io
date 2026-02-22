@@ -68,7 +68,7 @@
         {
             title: "{{ page.title }}",
             start: "{{ page.date }}",
-            url: "{{ page.permalink }}"
+            url: "{{ config.base_url | safe }}{{ page.path | safe }}"
         }{% if not loop.last %},{% endif %}
         {% endfor %}
     ];
@@ -79,6 +79,7 @@
             initialView: 'dayGridMonth',
             events: events,
             eventClick: function(info) {
+                info.jsEvent.preventDefault();
                 if (info.event.url) {
                     window.location.href = info.event.url;
                 }
