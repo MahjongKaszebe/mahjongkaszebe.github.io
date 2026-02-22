@@ -125,6 +125,9 @@
         const calendarEl = document.getElementById('calendar');
         const calendar = new FullCalendar.Calendar(calendarEl, {
             initialView: 'dayGridMonth',
+            firstDay: 1,
+            eventBackgroundColor: '#000000',
+            eventTextColor: '#FFE600',
             events: events,
             eventClick: function(info) {
                 info.jsEvent.preventDefault();
