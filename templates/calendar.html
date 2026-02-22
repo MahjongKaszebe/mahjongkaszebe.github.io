@@ -173,8 +173,9 @@
                 const startDay = startDate.toLocaleDateString('pl-PL', { weekday: 'short' });
                 const endDay = endDate.toLocaleDateString('pl-PL', { weekday: 'short' });
                 const startDateStr = startDate.toLocaleDateString('pl-PL', { day: 'numeric', month: 'long' });
+                const endDateStr = endDate.toLocaleDateString('pl-PL', { day: 'numeric', month: 'long' });
                 const year = startDate.getFullYear();
-                dateStr = `${startDay} - ${endDay}, ${startDateStr} ${year}`;
+                dateStr = `${startDay} - ${endDay}, ${startDateStr}-${endDateStr} ${year}`;
             } else {
                 dateStr = startDate.toLocaleDateString('pl-PL', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
             }
