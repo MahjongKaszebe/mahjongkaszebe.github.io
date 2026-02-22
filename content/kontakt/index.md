@@ -1,5 +1,6 @@
 +++
 title = "Kontakt"
+sort_by = "weight"
 +++
 
 # Kontakt
