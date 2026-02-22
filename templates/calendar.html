@@ -112,8 +112,8 @@
         {
             title: "{{ page.title }}",
             start: "{{ page.date }}",
-            {% if page.end_date %}
-            end: "{{ page.end_date }}",
+            {% if page.extra.end_date %}
+            end: "{{ page.extra.end_date }}",
             {% endif %}
             allDay: true,
             url: "{{ config.base_url | safe }}{{ page.path | safe }}"
