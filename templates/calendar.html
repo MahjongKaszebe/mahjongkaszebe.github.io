@@ -81,6 +81,10 @@
         {
             title: "{{ page.title }}",
             start: "{{ page.date }}",
+            {% if page.end_date %}
+            end: "{{ page.end_date }}",
+            allDay: true,
+            {% endif %}
             url: "{{ config.base_url | safe }}{{ page.path | safe }}"
         }{% if not loop.last %},{% endif %}
         {% endfor %}
