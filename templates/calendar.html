@@ -19,8 +19,15 @@
         margin-bottom: 2rem;
         border: 2px solid #000;
     }
+    .fc {
+        --fc-border-color: #000 !important;
+        --fc-today-bg-color: rgba(255, 140, 0, 0.2);
+        --fc-page-bg-color: #FFE600;
+        --fc-neutral-bg-color: #FFE600;
+        --fc-list-event-hover-bg-color: #FFE600;
+    }
     .fc-theme-standard td, .fc-theme-standard th {
-        border-color: #000;
+        border-color: #000 !important;
     }
     .fc .fc-daygrid-day-number {
         color: #000;
@@ -28,17 +35,27 @@
     .fc .fc-col-header-cell-cushion {
         color: #000;
     }
+    .fc .fc-daygrid-day.fc-day-today {
+        background-color: rgba(255, 140, 0, 0.2);
+    }
     .fc-event {
         cursor: pointer;
-        background-color: #FFE600;
-        border-color: #000;
-        color: #000;
+        background-color: #000 !important;
+        border-color: #000 !important;
+        color: #FFE600 !important;
+    }
+    .fc-event-dot {
+        border-color: #FF0000 !important;
     }
     .fc-daygrid-event-dot {
         border-color: #FF0000 !important;
     }
+    .fc-v-event {
+        background-colorimportant;
+        border: #000 !-color: #000 !important;
+    }
     .fc-list-event:hover td {
-        background-color: #FFE600;
+        background-color: #FFE600 !important;
     }
     .fc-list-day-cushion {
         background-color: #FFE600 !important;
@@ -49,12 +66,16 @@
     .fc-button {
         background-color: #000 !important;
         border-color: #000 !important;
+        color: #FFE600 !important;
     }
     .fc-button:hover {
         background-color: #333 !important;
     }
     .fc-button-active {
         background-color: #FF8C00 !important;
+    }
+    .fc-toolbar-title {
+        color: #000 !important;
     }
     #events-list {
         background: #FFE600;
@@ -83,8 +104,8 @@
             start: "{{ page.date }}",
             {% if page.end_date %}
             end: "{{ page.end_date }}",
-            allDay: true,
             {% endif %}
+            allDay: true,
             url: "{{ config.base_url | safe }}{{ page.path | safe }}"
         }{% if not loop.last %},{% endif %}
         {% endfor %}
@@ -120,8 +141,17 @@
         const sortedEvents = [...events].sort((a, b) => new Date(a.start) - new Date(b.start));
         
         sortedEvents.forEach(event => {
-            const date = new Date(event.start);
-            const dateStr = date.toLocaleDateString('pl-PL', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+            const startDate = new Date(event.start);
+            const endDate = event.end ? new Date(event.end) : null;
+            
+            let dateStr;
+            if (endDate && endDate.getTime() !== startDate.getTime()) {
+                const endStr = endDate.toLocaleDateString('pl-PL', { day: 'numeric', month: 'long' });
+                dateStr = startDate.toLocaleDateString('pl-PL', { weekday: 'long', day: 'numeric', month: 'long' }) + ' - ' + endStr;
+            } else {
+                dateStr = startDate.toLocaleDateString('pl-PL', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+            }
+            
             const item = document.createElement('div');
             item.className = 'event-item';
             item.innerHTML = `
