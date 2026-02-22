@@ -35,6 +35,7 @@
         <nav>
             <a href="{{ get_url(path="@/_index.md") }}" {% if current_path == "/" %}class="current"{% endif %}>Strona główna</a>
             <a href="{{ get_url(path="@/blog/_index.md") }}" {% if current_path == "/blog/" %}class="current"{% endif %}>Aktualności</a>
+            <a href="{{ get_url(path="@/wydarzenia/_index.md") }}" {% if current_path == "/wydarzenia/" %}class="current"{% endif %}>Kalendarz</a>
             <a href="{{ get_url(path="@/kontakt.md") }}/" {% if current_path == "/kontakt/" %}class="current"{% endif %}>Kontakt</a>
         </nav>
     </header>
