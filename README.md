@@ -173,7 +173,7 @@ Strona używa kolorów:
 - Tło: żółty (`#FFE600`)
 - Tekst: czarny (`#000000`)
 - Menu: czarne z żółtym tekstem
-- Aktywny element menu: pomarańczowy (`#FF8C00`)
+- Aktywny element menu: czerwony (`#FF0000`)
 
 Edytuj `templates/base.html` aby zmienić style CSS.
 
