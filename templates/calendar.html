@@ -25,6 +25,9 @@
         --fc-page-bg-color: #FFE600;
         --fc-neutral-bg-color: #FFE600;
         --fc-list-event-hover-bg-color: #FFE600;
+        --fc-event-background-color: #000000;
+        --fc-event-border-color: #000000;
+        --fc-event-text-color: #FFE600;
     }
     .fc-theme-standard td, .fc-theme-standard th {
         border-color: #000 !important;
@@ -37,32 +40,6 @@
     }
     .fc .fc-daygrid-day.fc-day-today {
         background-color: rgba(255, 0, 0, 0.2);
-    }
-    .fc-event, 
-    .fc-event *,
-    .fc-event a,
-    .fc-event-title,
-    .fc-event-title a,
-    .fc-event-main,
-    .fc-event-main a,
-    .fc-h-event .fc-event-title-container,
-    .fc-h-event .fc-event-title,
-    .fc-timegrid-event .fc-event-main,
-    .fc-timegrid-event .fc-event-title,
-    .fc-daygrid-event .fc-event-title,
-    .fc-daygrid-event .fc-event-main,
-    .fc-event-frame,
-    .fc-event-title-container,
-    .fc-timegrid-event-frame,
-    .fc-timegrid-slot-label,
-    .fc-timegrid-slot-label-cushion {
-        cursor: pointer !important;
-        background-color: #000 !important;
-        border-color: #000 !important;
-        color: #FFE600 !important;
-    }
-    .fc-timegrid-event .fc-event-title {
-        color: #FFE600 !important;
     }
     .fc-list-event:hover td {
         background-color: #FFE600 !important;
@@ -136,9 +113,6 @@
         const calendar = new FullCalendar.Calendar(calendarEl, {
             initialView: 'dayGridMonth',
             firstDay: 1,
-            eventBackgroundColor: '#000000',
-            eventBorderColor: '#000000',
-            eventTextColor: '#FFE600',
             events: events,
             eventClick: function(info) {
                 info.jsEvent.preventDefault();
