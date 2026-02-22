@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}{{ config.title }}{% endblock %}</title>
+    <style>
+        body { 
+            font-family: system-ui, sans-serif; 
+            max-width: 800px; 
+            margin: 0 auto; 
+            padding: 2rem; 
+            line-height: 1.6;
+            background-color: #FFE600;
+            color: #000000;
+        }
+        header { margin-bottom: 2rem; border-bottom: 2px solid #000; padding-bottom: 1rem; }
+        nav a { margin-right: 1rem; color: #000; text-decoration: underline; }
+        article { margin-bottom: 2rem; }
+        h1, h2, h3 { color: #000; }
+        code { background: #FFD900; padding: 0.2rem 0.4rem; border-radius: 3px; border: 1px solid #000; }
+        pre { background: #FFD900; padding: 1rem; overflow-x: auto; border: 1px solid #000; }
+        a { color: #000; }
+        footer { margin-top: 2rem; border-top: 2px solid #000; padding-top: 1rem; }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="{{ get_url(path="@/_index.md") }}">Strona główna</a>
+            <a href="{{ get_url(path="@/blog/_index.md") }}">Blog</a>
+        </nav>
+    </header>
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+    <footer>
+        <p>&copy; 2026 Mahjong Kaszëbë</p>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,5 @@
+base_url = "https://mahjongkaszebe.github.io"
+compile_sass = false
+generate_feeds = false
+build_search_index = false
+title = "Mahjong Kaszëbë"
