@@ -174,10 +174,14 @@
             if (endDate && endDate.getTime() !== startDate.getTime()) {
                 const startDay = polishDaysShort[startDate.getDay()];
                 const endDay = polishDaysShort[endDate.getDay()];
-                const startDateStr = startDate.toLocaleDateString('pl-PL', { day: 'numeric', month: 'long' });
-                const endDateStr = endDate.toLocaleDateString('pl-PL', { day: 'numeric', month: 'long' });
                 const year = startDate.getFullYear();
-                dateStr = `${startDay} - ${endDay}, ${startDateStr}-${endDateStr} ${year}`;
+                if (startDate.getMonth() === endDate.getMonth()) {
+                    dateStr = `${startDay} - ${endDay}, ${startDate.getDate()}-${endDate.getDate()} ${startDate.toLocaleDateString('pl-PL', { month: 'long' })} ${year}`;
+                } else {
+                    const startDateStr = startDate.toLocaleDateString('pl-PL', { day: 'numeric', month: 'long' });
+                    const endDateStr = endDate.toLocaleDateString('pl-PL', { day: 'numeric', month: 'long' });
+                    dateStr = `${startDay} - ${endDay}, ${startDateStr}-${endDateStr} ${year}`;
+                }
             } else {
                 dateStr = startDate.toLocaleDateString('pl-PL', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
             }
