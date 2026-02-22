@@ -1,5 +1,5 @@
 +++
-title = "Wtorki z Mahjongiem"
+title = "Spotkanie Mahjong Kaszëbë"
 date = 2026-01-01
 template = "event.html"
 
@@ -15,7 +15,7 @@ cancelled = []
 
 Zapraszamy na nasze cotygodniowe spotkania przy mahjongu!
 
-Każdy wtorek od 17:00 do około 20:00 spotykamy się w Gdańskim Klubie Fantastyki przy ulicy Śląskiej 66B, aby grać, uczyć nowych graczy i miło spędzać czas przy ulubionej grze.
+Każdy wtorek od 17:00 do około 20:00 spotykamyamy się w Gdańskim Klubie Fantastyki przy ulicy Śląskiej 66B, aby grać, uczyć nowych graczy i miło spędzać czas przy ulubionej grze.
 
 Nie musisz znać zasad - chętnie nauczymy! Zarówno początkujący, jak i doświadczeni gracze są mile widziani. To świetna okazja, by poćwiczyć techniques, poznać nowych ludzi i po prostu dobrze się bawić.
 

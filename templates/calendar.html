@@ -29,11 +29,45 @@
         --fc-event-border-color: #000000;
         --fc-event-text-color: #FFE600;
     }
+    .fc-event:hover {
+        background-color: #8B0000 !important;
+    }
     .fc-event:hover .fc-event-main {
         background-color: #8B0000 !important;
     }
+    .fc-event:hover .fc-event-time {
+        background-color: #8B0000 !important;
+    }
+    .fc-event:hover .fc-event-title {
+        background-color: #8B0000 !important;
+    }
+    .fc-event {
+        background-color: #000 !important;
+        border-color: #000 !important;
+        color: #FFE600 !important;
+        font-weight: normal !important;
+    }
+    .fc-event .fc-event-main {
+        background-color: #000 !important;
+        color: #FFE600 !important;
+        font-weight: normal !important;
+    }
+    .fc-event-title {
+        font-weight: normal !important;
+    }
+    .fc-event-time {
+        color: #FFE600 !important;
+        background-color: #000 !important;
+        padding: 0 2px;
+        font-weight: normal !important;
+    }
+    .fc-daygrid-month-view .fc-daygrid-event-dot {
+        display: none !important;
+    }
+    .fc-timegrid-view .fc-event-dot {
+        border-color: #FF0000 !important;
+    }
     .fc-timegrid-view .fc-event,
-    .fc-timegrid-view .fc-event .fc-event-main,
     .fc-timegrid-view .fc-event-title,
     .fc-timegrid-view .fc-event-title a,
     .fc-timeGridWeek-view .fc-event,
@@ -124,6 +158,7 @@
     }
 </style>
 
+<script src="/recurring-events.js"></script>
 <script>
     // Static events from MD files
     const staticEvents = [
@@ -170,14 +205,15 @@
                     }
                     
                     while (current <= sixMonthsLater) {
-                        const dateStr = current.toISOString().split('T')[0];
-                        const isCancelled = event.cancelled && event.cancelled.includes(dateStr);
+                        const dateStr = current.toISOString().slice(0, 16);
+                        const isCancelled = event.cancelled && event.cancelled.includes(dateStr.split('T')[0]);
                         if (!isCancelled) {
                             recurringEvents.push({
                                 ...event,
                                 start: dateStr,
                                 end: null,
-                                title: event.title + " ☕",
+                                title: event.title,
+                                allDay: false,
                                 isRecurring: true
                             });
                         }
@@ -249,33 +285,12 @@
                 if (processedRecurring.has(event.title)) return;
                 processedRecurring.add(event.title);
                 
-                // Add consolidated recurring entry
-                const polishDays = {
-                    0: 'niedziela',
-                    1: 'poniedziałek',
-                    2: 'wtorek',
-                    3: 'środa',
-                    4: 'czwartek',
-                    5: 'piątek',
-                    6: 'sobota'
-                };
-                
-                // Parse day of week from schedule
-                const parts = event.schedule.split(' ');
-                const dayOfWeek = parts[4];
-                const dayName = polishDays[parseInt(dayOfWeek)] || 'wtorek';
-                
-                // Find next occurrence from today for display
-                const nextDate = new Date();
-                nextDate.setHours(parseInt(parts[1]), parseInt(parts[0]), 0, 0);
-                while (nextDate.getDay() !== parseInt(dayOfWeek)) {
-                    nextDate.setDate(nextDate.getDate() + 1);
-                }
+                const dateStr = formatRecurringDate(event.schedule);
                 
                 const item = document.createElement('div');
                 item.className = 'event-item';
                 item.innerHTML = `
-                    <div class="event-date">Każdy ${dayName}: ${nextDate.toLocaleDateString('pl-PL', { day: 'numeric', month: 'long', year: 'numeric' })}</div>
+                    <div class="event-date">${dateStr}</div>
                     <div><a href="${event.url}">${event.title}</a></div>
                 `;
                 listEl.appendChild(item);

@@ -5,13 +5,22 @@
 {% block content %}
 <h1>{{ page.title }}</h1>
 
-<p style="font-size: 1.2em; color: #FF0000; font-weight: bold;">
-    {% if page.extra.end_date %}
-    {{ page.date | date(locale="pl_PL", format="%a") }} - {{ page.extra.end_date | date(locale="pl_PL", format="%a") }}, {{ page.date | date(locale="pl_PL", format="%-d") }}-{{ page.extra.end_date | date(locale="pl_PL", format="%-d") }} {{ page.date | date(locale="pl_PL", format="%B %Y") }}
-    {% else %}
+<p id="event-date" style="font-size: 1.2em; color: #FF0000; font-weight: bold;" 
+   data-schedule="{{ page.extra.schedule | default(value='') }}">
     {{ page.date | date(locale="pl_PL", format="%A, %-d %B %Y") }}
-    {% endif %}
 </p>
 
 {{ page.content | safe }}
+
+{% if page.extra.schedule %}
+<script src="/recurring-events.js"></script>
+<script>
+    const dateEl = document.getElementById('event-date');
+    const schedule = dateEl.getAttribute('data-schedule');
+    if (schedule) {
+        const formatted = formatRecurringDate(schedule);
+        dateEl.textContent = formatted;
+    }
+</script>
+{% endif %}
 {% endblock %}
