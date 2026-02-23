@@ -34,6 +34,9 @@ jobs:
           import re
 
           with open('messages.json', 'r') as f:
+              content = f.read()
+              print(f"File length: {len(content)}")
+              print(f"File content: {content[:200]}")
               messages = json.load(f)
 
           processed_file = 'processed_messages.txt'
