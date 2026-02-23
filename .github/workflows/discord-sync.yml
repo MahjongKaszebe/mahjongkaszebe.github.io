@@ -2,7 +2,7 @@ name: Discord to GitHub Sync
 
 on:
   schedule:
-    - cron: '*/5 * * * *'  # Every 5 minutes
+    - cron: '*/5 * * * *'
   workflow_dispatch:
 
 jobs:
@@ -14,24 +14,17 @@ jobs:
 
       - name: Fetch Discord messages
         run: |
-          # Get messages from Discord channel
           RESPONSE=$(curl -s -H "Authorization: Bot ${{ secrets.DISCORD_BOT_TOKEN }}" \
             "https://discord.com/api/v10/channels/${{ secrets.DISCORD_CHANNEL_ID }}/messages?limit=10")
-          
-          # Save to temp file
           echo "$RESPONSE" > messages.json
 
-      - name: Process messages and create files
-        env:
-          DISCORD_CHANNEL_ID: ${{ secrets.DISCORD_CHANNEL_ID }}
+      - name: Process messages
         run: |
           pip install requests pyyaml > /dev/null 2>&1
-          
-          python3 << 'PYTHON_SCRIPT'
+          python3 -c "
 import json
 import os
 import re
-from datetime import datetime
 
 with open('messages.json', 'r') as f:
     messages = json.load(f)
@@ -55,8 +48,7 @@ for msg in messages:
     if not content.startswith('!event'):
         continue
     
-    # Parse event format
-    lines = content.strip().split('\\n')
+    lines = content.strip().split('\n')
     title = None
     date = None
     end_date = None
@@ -67,86 +59,79 @@ for msg in messages:
     for line in lines[1:]:
         line = line.strip()
         if line.startswith('title:'):
-            title = line.replace('title:', '').strip().strip('"')
+            title = line.replace('title:', '').strip().strip('\"')
         elif line.startswith('date:'):
             date = line.replace('date:', '').strip()
         elif line.startswith('end_date:'):
-            end_date = line.replace('end_date:', '').strip().strip('"')
+            end_date = line.replace('end_date:', '').strip().strip('\"')
         elif line.startswith('section:'):
-            section = line.replace('section:', '').strip()
-            if section == 'blog':
-                section = 'blog'
-            else:
-                section = 'wydarzenia'
+            section_line = line.replace('section:', '').strip()
+            section = 'blog' if section_line == 'blog' else 'wydarzenia'
         elif line.startswith('---'):
             in_body = True
         elif in_body and line:
             body_lines.append(line)
     
     if not title or not date:
-        print(f"Skipping {msg_id}: missing title or date")
+        print(f'Skipping {msg_id}: missing title or date')
         continue
     
-    # Create filename
     slug = title.lower().replace(' ', '-')
     slug = re.sub(r'[^a-z0-9-]', '', slug)
     
     if section == 'blog':
         folder = 'content/blog'
-        filename = f"{folder}/{slug}.md"
-        content = f"""+++
-title = "{title}"
+        filename = f'{folder}/{slug}.md'
+        file_content = f'''+++
+title = \"{title}\"
 date = {date}
 +++
 
-{'\\n'.join(body_lines)}
-"""
+{\"\\n\".join(body_lines)}
+'''
     else:
         folder = 'content/wydarzenia'
-        filename = f"{folder}/{slug}.md"
+        filename = f'{folder}/{slug}.md'
         if end_date:
-            content = f"""+++
-title = "{title}"
+            file_content = f'''+++
+title = \"{title}\"
 date = {date}
-template = "event.html"
+template = \"event.html\"
 
 [extra]
-end_date = "{end_date}"
+end_date = \"{end_date}\"
 +++
 
-{'\\n'.join(body_lines)}
-"""
+{\"\\n\".join(body_lines)}
+'''
         else:
-            content = f"""+++
-title = "{title}"
+            file_content = f'''+++
+title = \"{title}\"
 date = {date}
-template = "event.html"
+template = \"event.html\"
 +++
 
-{'\\n'.join(body_lines)}
-"""
+{\"\\n\".join(body_lines)}
+'''
     
-    # Create folder if needed
     os.makedirs(folder, exist_ok=True)
     
-    # Write file
     with open(filename, 'w') as f:
-        f.write(content)
+        f.write(file_content)
     
-    print(f"Created: {filename}")
+    print(f'Created: {filename}')
     new_processed.append(msg_id)
     changes_made = True
 
-# Save processed IDs
 with open(processed_file, 'w') as f:
     for msg_id in processed.union(set(new_processed)):
-        f.write(f"{msg_id}\\n")
+        f.write(f'{msg_id}\n')
 
 if changes_made:
-    print("::set-output name=changed::true")
+    print('changed=true')
 else:
-    print("No new events")
-PYTHON_SCRIPT
+    print('No new events')
+"
 
       - name: Commit changes
         run: |
@@ -154,7 +139,7 @@ PYTHON_SCRIPT
             git config --local user.email "bot@github.com"
             git config --local user.name "Discord Bot"
             git add -A
-            git commit -m "Sync events from Discord $(date '+%Y-%m-%d %H:%M')" || echo "No changes to commit"
+            git commit -m "Sync events from Discord $(date '+%Y-%m-%d %H:%M')" || echo "No changes"
             git push
           else
             echo "No changes to push"
