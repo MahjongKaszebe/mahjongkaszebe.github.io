@@ -7,10 +7,10 @@ on:
 
 permissions:
   contents: write
-secrets: inherit
 
 jobs:
   sync:
+    secrets: inherit
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
