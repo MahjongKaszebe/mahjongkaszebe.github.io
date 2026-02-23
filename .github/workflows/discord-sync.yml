@@ -10,7 +10,6 @@ permissions:
 
 jobs:
   sync:
-    secrets: inherit
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
@@ -152,3 +151,4 @@ jobs:
                     else
                       echo "No changes to push"
                     fi
+    secrets: inherit
