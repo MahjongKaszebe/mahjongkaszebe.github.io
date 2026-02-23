@@ -86,7 +86,7 @@ jobs:
                   continue
               
               slug = title.lower().replace(' ', '-')
-              slug = re.sub(r'[^a-z0-9-]', '', slug)
+              slug = re.sub(r'[^a-z0-9ąćęłńóśżź-]', '', slug)
               
               if section == 'blog':
                   folder = 'content/blog'
