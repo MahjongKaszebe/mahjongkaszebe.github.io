@@ -14,9 +14,12 @@ jobs:
 
       - name: Fetch Discord messages
         run: |
-          RESPONSE=$(curl -s -H "Authorization: Bot ${{ secrets.DISCORD_BOT_TOKEN }}" \
+          RESPONSE=$(curl -s -w "\n%{http_code}" -H "Authorization: Bot ${{ secrets.DISCORD_BOT_TOKEN }}" \
             "https://discord.com/api/v10/channels/${{ secrets.DISCORD_CHANNEL_ID }}/messages?limit=10")
-          echo "$RESPONSE" > messages.json
+          HTTP_CODE=$(echo "$RESPONSE" | tail -n1)
+          BODY=$(echo "$RESPONSE" | sed '$d')
+          echo "HTTP Code: $HTTP_CODE"
+          echo "Response: $BODY" > messages.json
 
       - name: Process messages
         run: |
