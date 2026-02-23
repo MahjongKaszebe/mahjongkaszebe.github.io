@@ -23,6 +23,7 @@ jobs:
           BODY=$(echo "$RESPONSE" | sed '$d')
           echo "HTTP Code: $HTTP_CODE"
           echo "Response: $BODY" > messages.json
+          cat messages.json
 
       - name: Process messages
         run: |
