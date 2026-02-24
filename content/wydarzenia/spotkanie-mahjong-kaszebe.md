@@ -8,7 +8,7 @@ template = "event.html"
 # 0 17 * * 2 = Every Tuesday at 17:00
 schedule = "0 17 * * 2"
 # Add dates to cancel specific occurrences: cancelled = ["2026-03-03", "2026-03-10"]
-cancelled = []
+cancelled = ["2026-03-03"]
 +++
 
 ![Nauka gry i wolne granie](/nauka-gry.png)
